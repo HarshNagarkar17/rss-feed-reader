@@ -40,14 +40,14 @@ export const FeedArticleList = memo(function FeedArticleList({
               rel="noopener noreferrer"
               className="group/link mt-2.5 flex items-start gap-2 text-pretty"
             >
-              <span
+              <h2
                 className={cn(
                   "text-[17px] font-medium leading-snug tracking-tight text-foreground transition-opacity sm:text-lg",
                   "group-hover/link:opacity-90",
                 )}
               >
                 {article.title}
-              </span>
+              </h2>
               <ArrowUpRight
                 className="mt-0.5 size-4 shrink-0 text-muted-foreground/55 transition-colors group-hover/link:text-foreground/70"
                 strokeWidth={1.25}

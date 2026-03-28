@@ -35,7 +35,7 @@ export const FeedMainColumn = memo(function FeedMainColumn({
     <main className="min-w-0 flex-1 border-t border-border/40 pt-10 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-10 lg:pl-14">
       <header className="mb-12 max-w-xl">
         <h1 className="font-heading text-2xl font-light tracking-tight text-foreground sm:text-3xl">
-          Reader
+          Tech feed reader
         </h1>
       </header>
 
