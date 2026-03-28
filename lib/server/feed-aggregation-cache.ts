@@ -15,12 +15,37 @@ function hashSourcesForCacheKey(sources: FeedSource[]): string {
     .digest("hex")
 }
 
-export function getCachedAggregatedFeeds(sources: FeedSource[]) {
+const LOG_PREFIX = "[feed-cache]"
+
+function logCacheResult(
+  hit: boolean,
+  key: string,
+  sourceCount: number
+): void {
+  const detail = {
+    cacheKeyPrefix: key.slice(0, 12),
+    sourceCount,
+    ttlSeconds: AGGREGATED_FEEDS_CACHE_SECONDS,
+  }
+  if (hit) {
+    console.info(`${LOG_PREFIX} HIT — served from Next.js incremental cache`, detail)
+  } else {
+    console.info(`${LOG_PREFIX} MISS — ran aggregateFeeds (RSS fetch + merge)`, detail)
+  }
+}
+
+export async function getCachedAggregatedFeeds(sources: FeedSource[]) {
   const key = hashSourcesForCacheKey(sources)
+  let ranUncachedFetcher = false
   const run = unstable_cache(
-    async () => aggregateFeeds(sources),
+    async () => {
+      ranUncachedFetcher = true
+      return aggregateFeeds(sources)
+    },
     ["reader-feeds", key],
     { revalidate: AGGREGATED_FEEDS_CACHE_SECONDS }
   )
-  return run()
+  const data = await run()
+  logCacheResult(!ranUncachedFetcher, key, sources.length)
+  return data
 }
